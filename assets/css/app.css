@@ -1,0 +1,369 @@
+/* ============================================================
+   Consola Algorítmica — interfaz
+   ============================================================ */
+
+:root {
+  --tinta: #00324D;
+  --tinta-alta: #01253A;
+  --tinta-suave: #2C5D77;
+  --verde: #39A900;
+  --verde-hondo: #2C8000;
+  --ambar: #E29A2D;
+  --papel: #EFF2F1;
+  --panel: #FFFFFF;
+  --linea: #D3DCE1;
+  --gris: #64777F;
+  --alarma: #C0392B;
+  --rail: 16rem;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--papel);
+  color: #14222A;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.eyebrow {
+  font-family: "Barlow Condensed", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+/* ---------------- Estructura ---------------- */
+.consola { display: grid; grid-template-columns: var(--rail) 1fr; min-height: 100vh; }
+
+/* ---------------- Rail de canales ---------------- */
+.rail {
+  background: var(--tinta);
+  color: #DCE6EC;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.rail-marca { padding: 1.4rem 1.2rem 1rem; border-bottom: 1px solid rgba(255,255,255,.12); }
+.rail-marca .eyebrow { color: var(--verde); margin: 0 0 .25rem; }
+.rail-marca h1 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.75rem; line-height: .98; margin: 0; color: #fff; font-weight: 700;
+}
+.rail-marca p {
+  margin: .4rem 0 0; font-size: .78rem; color: #8FA9B7; letter-spacing: .02em;
+}
+
+.canales { list-style: none; margin: 0; padding: .6rem 0; overflow-y: auto; flex: 1; }
+.canal { display: block; }
+
+.canal button {
+  width: 100%; display: grid; grid-template-columns: 2.4rem 1fr; gap: .7rem;
+  align-items: center; background: none; border: 0; cursor: pointer;
+  padding: .5rem 1.1rem; text-align: left; color: inherit;
+  font: inherit; border-left: 3px solid transparent;
+  transition: background .16s ease, border-color .16s ease;
+}
+.canal button:hover { background: rgba(255,255,255,.06); }
+.canal button:focus-visible { outline: 2px solid var(--verde); outline-offset: -2px; }
+.canal[aria-current="true"] button {
+  background: rgba(57,169,0,.13); border-left-color: var(--verde);
+}
+
+/* El fader: nivel de completitud del capítulo */
+.fader {
+  position: relative; height: 2.6rem; width: 100%;
+  background: rgba(255,255,255,.1); border-radius: 2px; overflow: hidden;
+}
+.fader i {
+  position: absolute; inset: auto 0 0 0; display: block;
+  background: var(--verde); transition: height .3s ease; height: var(--nivel, 0%);
+}
+.fader[data-estado="parcial"] i { background: var(--ambar); }
+.fader::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 33%;
+  border-top: 1px solid rgba(0,50,77,.35);
+}
+.canal-texto strong {
+  display: block; font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.02rem; font-weight: 600; color: #fff; line-height: 1.15;
+}
+.canal-texto span {
+  display: block; font-size: .68rem; letter-spacing: .05em;
+  color: #7E9AAA; font-family: "IBM Plex Mono", monospace; margin-top: .1rem;
+}
+
+.rail-pie { padding: .9rem 1.1rem 1.1rem; border-top: 1px solid rgba(255,255,255,.12); }
+.rail-pie .estado-guardado { font-size: .72rem; color: #8FA9B7; margin: 0 0 .6rem; }
+.rail-pie .estado-guardado b { color: var(--verde); font-weight: 600; }
+.rail-acciones { display: flex; flex-wrap: wrap; gap: .35rem; }
+
+/* ---------------- Botones ---------------- */
+.btn {
+  font-family: "Barlow Condensed", sans-serif; text-transform: uppercase;
+  letter-spacing: .09em; font-size: .82rem; font-weight: 600;
+  padding: .45rem .85rem; border-radius: 2px; border: 1px solid var(--linea);
+  background: var(--panel); color: var(--tinta); cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.btn:hover { background: var(--tinta); color: #fff; border-color: var(--tinta); }
+.btn:focus-visible { outline: 2px solid var(--verde); outline-offset: 2px; }
+.btn-verde { background: var(--verde); border-color: var(--verde); color: #fff; }
+.btn-verde:hover { background: var(--verde-hondo); border-color: var(--verde-hondo); }
+.btn-fantasma {
+  background: transparent; color: #C6D6DE; border-color: rgba(255,255,255,.24); font-size: .74rem;
+}
+.btn-fantasma:hover { background: #fff; color: var(--tinta); border-color: #fff; }
+
+/* ---------------- Panel de trabajo ---------------- */
+.trabajo { padding: 2.2rem 2.6rem 5rem; max-width: 60rem; }
+
+.cap-cabecera { border-bottom: 2px solid var(--tinta); padding-bottom: 1rem; margin-bottom: 1.8rem; }
+.cap-cabecera .eyebrow { color: var(--verde-hondo); margin: 0 0 .3rem; }
+.cap-cabecera h2 {
+  font-family: "Barlow Condensed", sans-serif; font-size: 2.5rem; line-height: 1.02;
+  margin: 0 0 .5rem; color: var(--tinta); font-weight: 700;
+}
+.cap-cabecera .intro { margin: 0; color: #3D5964; max-width: 46rem; }
+.cap-meta { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .9rem; }
+.pastilla {
+  font-family: "IBM Plex Mono", monospace; font-size: .7rem; letter-spacing: .04em;
+  border: 1px solid var(--linea); background: var(--panel);
+  padding: .2rem .55rem; border-radius: 2px; color: var(--tinta-suave);
+}
+.pastilla-verde { border-color: var(--verde); color: var(--verde-hondo); }
+
+.bloque-seccion {
+  font-family: "Barlow Condensed", sans-serif; text-transform: uppercase;
+  letter-spacing: .1em; font-size: 1.15rem; color: var(--tinta);
+  margin: 2.6rem 0 1rem; padding-bottom: .3rem; border-bottom: 1px solid var(--linea);
+}
+
+.enunciado {
+  background: var(--panel); border: 1px solid var(--linea); border-left: 3px solid var(--tinta);
+  padding: .9rem 1.1rem; margin: 2rem 0 1rem;
+}
+.enunciado .eyebrow { color: var(--tinta); margin: 0 0 .35rem; }
+.enunciado p { margin: 0; font-size: .95rem; }
+.enunciado .contexto { margin-top: .5rem; color: var(--gris); font-style: italic; font-size: .88rem; }
+
+.campo { margin: 1.3rem 0; }
+.campo label, .campo .campo-titulo {
+  display: block; font-weight: 600; color: var(--tinta); margin-bottom: .3rem; font-size: .95rem;
+}
+.campo .ayuda { margin: 0 0 .45rem; font-size: .84rem; color: var(--gris); }
+
+input[type="text"], textarea, select {
+  width: 100%; padding: .6rem .75rem; font: inherit; color: inherit;
+  background: var(--panel); border: 1px solid var(--linea); border-radius: 2px;
+}
+input[type="text"]:focus, textarea:focus, select:focus {
+  outline: none; border-color: var(--verde); box-shadow: 0 0 0 3px rgba(57,169,0,.16);
+}
+textarea { resize: vertical; }
+textarea.mono, .editor textarea {
+  font-family: "IBM Plex Mono", Consolas, monospace; font-size: .88rem; line-height: 1.5;
+  tab-size: 2;
+}
+
+.requerido-vacio { border-color: #E4B8B3; background: #FEF8F7; }
+
+/* Tabla de verdad */
+.tv { border-collapse: collapse; margin-top: .3rem; }
+.tv th, .tv td { border: 1px solid var(--linea); padding: .3rem .8rem; text-align: center; }
+.tv th {
+  background: var(--tinta); color: #fff; font-family: "Barlow Condensed", sans-serif;
+  text-transform: uppercase; letter-spacing: .08em; font-weight: 600;
+}
+.tv td { background: var(--panel); }
+.tv select { width: 4.5rem; padding: .2rem; text-align: center; }
+
+/* Editor de código */
+.editor { border: 1px solid var(--linea); background: var(--panel); }
+.editor-barra {
+  display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
+  padding: .5rem .7rem; background: var(--tinta); color: #C6D6DE;
+}
+.editor-barra .eyebrow { color: var(--verde); margin: 0; }
+.editor-barra label { font-size: .78rem; color: #A9C0CC; margin-left: auto; }
+.editor-barra input {
+  width: 15rem; padding: .25rem .5rem; font-family: "IBM Plex Mono", monospace;
+  font-size: .78rem; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.08); color: #fff;
+}
+.editor textarea { border: 0; border-radius: 0; display: block; }
+.salida {
+  border-top: 1px solid var(--linea); background: #0B1E28; color: #CFE4D2;
+  font-family: "IBM Plex Mono", monospace; font-size: .82rem; line-height: 1.5;
+  padding: .7rem .9rem; white-space: pre-wrap; word-break: break-word; min-height: 2.6rem; margin: 0;
+}
+.salida:empty::before { content: "Sin ejecutar todavía."; color: #5C7480; }
+.pista {
+  margin: 0; padding: .55rem .9rem; font-size: .86rem;
+  border-top: 1px solid var(--linea); background: #F4F8F1; color: var(--verde-hondo);
+}
+.pista[data-ok="false"] { background: #FDF6EC; color: #9A6208; }
+.pista[data-ok="error"] { background: #FDF2F1; color: var(--alarma); }
+
+/* Imágenes */
+.subida { border: 1px dashed var(--linea); background: var(--panel); padding: .9rem; }
+.subida img { max-width: 100%; max-height: 22rem; display: block; margin-bottom: .6rem; border: 1px solid var(--linea); }
+.subida-acciones { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+.subida input[type="file"] { font-size: .82rem; }
+
+/* Ticket */
+.ticket {
+  background: var(--tinta); color: #fff; padding: 1.2rem 1.4rem; margin: 1.4rem 0;
+  border-left: 4px solid var(--verde);
+}
+.ticket .eyebrow { color: var(--verde); margin: 0 0 .5rem; }
+.ticket ol { margin: .5rem 0 0; padding-left: 1.2rem; }
+.ticket li { margin-bottom: .35rem; }
+.ticket .aviso { color: #9FB8C5; font-size: .85rem; margin: .8rem 0 0; }
+
+/* Aviso del foro */
+.aviso-foro {
+  border: 1px solid var(--ambar); background: #FEF9F0; padding: 1rem 1.2rem; margin: 2.5rem 0 0;
+}
+.aviso-foro .eyebrow { color: #9A6208; margin: 0 0 .35rem; }
+.aviso-foro ul { margin: .5rem 0 0 1.1rem; padding: 0; font-size: .9rem; }
+
+/* Evaluador paso a paso */
+.evaluador { border: 1px solid var(--linea); background: var(--panel); }
+.evaluador .expresion {
+  font-family: "IBM Plex Mono", monospace; font-size: 1rem; margin: 0;
+  padding: .8rem 1rem; background: var(--tinta); color: #fff; word-break: break-word;
+}
+.evaluador .nivel { padding: .9rem 1rem; border-top: 1px solid var(--linea); }
+.evaluador .nivel[data-abierto="false"] { background: #F7F9FA; }
+.evaluador .nivel .eyebrow { color: var(--tinta); margin: 0 0 .5rem; }
+.evaluador .nivel[data-abierto="false"] .eyebrow { color: var(--gris); }
+.evaluador .bloqueado { margin: 0; color: var(--gris); font-size: .88rem; font-style: italic; }
+.evaluador .paso {
+  display: flex; align-items: center; gap: .55rem; flex-wrap: wrap;
+  padding: .35rem 0; border-left: 3px solid transparent; padding-left: .6rem;
+}
+.evaluador .paso[data-estado="bien"] { border-left-color: var(--verde); }
+.evaluador .paso[data-estado="revisar"] { border-left-color: var(--ambar); }
+.evaluador .paso code {
+  font-family: "IBM Plex Mono", monospace; font-size: .92rem;
+  background: #F1F4F5; padding: .2rem .5rem; border-radius: 2px;
+}
+.evaluador .paso .igual { color: var(--gris); }
+.evaluador .paso select { width: auto; min-width: 11rem; padding: .35rem .5rem; }
+.evaluador .paso .marca {
+  font-family: "Barlow Condensed", sans-serif; text-transform: uppercase;
+  letter-spacing: .08em; font-size: .8rem; font-weight: 600;
+}
+.evaluador .paso[data-estado="bien"] .marca { color: var(--verde-hondo); }
+.evaluador .paso[data-estado="revisar"] .marca { color: #9A6208; }
+.evaluador .nota-paso {
+  flex-basis: 100%; margin: .3rem 0 0; font-size: .87rem; color: #3D5964;
+  background: #F4F8F1; border-left: 3px solid var(--verde); padding: .5rem .7rem;
+}
+
+/* Prueba de escritorio */
+.datos-prueba {
+  margin: 0 0 .5rem; font-size: .9rem; background: #F1F4F5;
+  border-left: 3px solid var(--tinta); padding: .5rem .75rem;
+}
+.datos-prueba .eyebrow { color: var(--tinta); margin-right: .5rem; }
+.traza-caja { overflow-x: auto; border: 1px solid var(--linea); background: var(--panel); }
+.traza { border-collapse: collapse; width: 100%; min-width: 34rem; }
+.traza th {
+  background: var(--tinta); color: #fff; font-family: "Barlow Condensed", sans-serif;
+  text-transform: uppercase; letter-spacing: .06em; font-size: .82rem; font-weight: 600;
+  padding: .4rem .6rem; text-align: left; white-space: nowrap;
+}
+.traza td { border: 1px solid var(--linea); padding: 0; }
+.traza input {
+  border: 0; border-radius: 0; background: transparent; padding: .45rem .6rem;
+  font-family: "IBM Plex Mono", monospace; font-size: .85rem;
+}
+.traza input:focus { box-shadow: inset 0 0 0 2px var(--verde); }
+.campo > [data-traza-fila] { margin-top: .6rem; }
+
+/* Panel de referencia */
+.referencia { border: 1px solid var(--linea); background: var(--panel); margin: 1.5rem 0; }
+.referencia summary {
+  cursor: pointer; padding: .75rem 1rem; font-weight: 600; color: var(--tinta);
+  display: flex; align-items: center; gap: .6rem;
+}
+.referencia summary .eyebrow { color: var(--verde-hondo); }
+.referencia summary:focus-visible { outline: 2px solid var(--verde); outline-offset: -2px; }
+.referencia > .ayuda { padding: 0 1rem; margin: 0 0 .5rem; }
+.referencia-lista {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1rem; padding: 0 1rem 1.1rem;
+}
+.referencia-lista h4 { margin: 0 0 .35rem; font-size: .92rem; color: var(--tinta); }
+.referencia-lista pre {
+  font-family: "IBM Plex Mono", monospace; font-size: .8rem; line-height: 1.5;
+  background: #0B1E28; color: #CFE4D2; padding: .6rem .7rem; margin: 0;
+  overflow-x: auto; white-space: pre;
+}
+.referencia-lista p { margin: .35rem 0 0; font-size: .84rem; color: var(--gris); }
+
+/* Navegación inferior */
+.pasos { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem;
+  padding-top: 1.4rem; border-top: 1px solid var(--linea); }
+
+/* Mensajes flotantes */
+.aviso-flotante {
+  position: fixed; bottom: 1.2rem; right: 1.2rem; z-index: 50;
+  background: var(--tinta); color: #fff; padding: .7rem 1.1rem; border-radius: 2px;
+  font-size: .88rem; box-shadow: 0 6px 22px rgba(0,50,77,.3); max-width: 22rem;
+}
+.aviso-flotante[data-tipo="error"] { background: var(--alarma); }
+
+/* ---------------- Modo documento ---------------- */
+.vista-documento { display: none; }
+body.modo-documento .consola { display: none; }
+body.modo-documento .vista-documento { display: block; }
+
+.doc-barra {
+  position: sticky; top: 0; z-index: 10; background: var(--tinta); color: #fff;
+  display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; padding: .7rem 1.4rem;
+}
+.doc-barra .eyebrow { color: var(--verde); margin: 0; }
+.doc-barra .btn { margin-left: auto; }
+.doc-lienzo { padding: 2rem 1rem 4rem; background: #E1E7EA; }
+.doc-lienzo .documento {
+  padding: 2.2cm 2cm; box-shadow: 0 2px 24px rgba(0,50,77,.16);
+}
+
+@media print {
+  .rail, .doc-barra, .pasos, .aviso-flotante { display: none !important; }
+  body.modo-documento .doc-lienzo { padding: 0; background: #fff; }
+  body.modo-documento .doc-lienzo .documento { box-shadow: none; padding: 0; max-width: none; }
+  @page { margin: 1.8cm 1.6cm; }
+}
+
+/* ---------------- Adaptación ---------------- */
+@media (max-width: 900px) {
+  .consola { grid-template-columns: 1fr; }
+  .rail { position: static; height: auto; }
+  .canales { display: flex; overflow-x: auto; padding: .5rem; }
+  .canal button {
+    grid-template-columns: 1fr; width: 11rem; border-left: 0; border-bottom: 3px solid transparent;
+  }
+  .canal[aria-current="true"] button { border-left-color: transparent; border-bottom-color: var(--verde); }
+  .fader { height: .4rem; }
+  .fader i { inset: 0 auto 0 0; width: var(--nivel, 0%); height: 100%; transition: width .3s ease; }
+  .fader::after { display: none; }
+  .trabajo { padding: 1.4rem 1.1rem 4rem; }
+  .cap-cabecera h2 { font-size: 1.9rem; }
+  .editor-barra input { width: 100%; }
+  .doc-lienzo .documento { padding: 1.4rem 1.1rem; }
+}

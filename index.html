@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consola Algorítmica · Radio Rating — Guía 3 ADSO</title>
+<meta name="description" content="Entorno de trabajo para las evidencias de la competencia 220501093 del programa Análisis y Desarrollo de Software del SENA.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+
+<div class="consola">
+  <aside class="rail">
+    <div class="rail-marca">
+      <p class="eyebrow">SENA · ADSO 228118</p>
+      <h1>Consola<br>Algorítmica</h1>
+      <p>Guía 3 · Competencia 220501093</p>
+    </div>
+
+    <ul class="canales" id="canales"></ul>
+
+    <div class="rail-pie">
+      <p class="estado-guardado" id="estado-guardado">Sin guardar todavía</p>
+      <div class="rail-acciones">
+        <button class="btn btn-verde" id="btn-documento">Ver documento</button>
+        <button class="btn btn-fantasma" id="btn-zip">Descargar ZIP</button>
+        <button class="btn btn-fantasma" id="btn-exportar">Guardar sesión</button>
+        <label class="btn btn-fantasma" for="archivo-sesion" style="cursor:pointer">Cargar sesión</label>
+        <input type="file" id="archivo-sesion" accept="application/json" hidden>
+        <button class="btn btn-fantasma" id="btn-limpiar">Empezar de cero</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="trabajo" id="panel"></main>
+</div>
+
+<div class="vista-documento">
+  <div class="doc-barra">
+    <p class="eyebrow">Vista del documento de entrega</p>
+    <button class="btn btn-fantasma" id="btn-volver">← Volver a la consola</button>
+    <button class="btn btn-verde" id="btn-imprimir">Imprimir o guardar como PDF</button>
+  </div>
+  <div class="doc-lienzo">
+    <div class="documento"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/docstyle.js"></script>
+<script src="assets/js/storage.js"></script>
+<script src="assets/js/report.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
